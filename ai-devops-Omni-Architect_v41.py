@@ -27,7 +27,7 @@ if 'state' not in st.session_state:
         'gen_cache': {}
     }
 
-st.set_page_config(page_title="Omni-Architect v41.0", layout="wide", page_icon="🛡️")
+st.set_page_config(page_title="Omni-Architect v41.1", layout="wide", page_icon="🛡️")
 
 # --- 3. CORE LOGIC (AI & DISCOVERY) ---
 @st.cache_data(ttl=10)
@@ -128,7 +128,7 @@ with st.sidebar:
     except Exception as e: st.error(f"IO Error: {e}")
 
 # --- 5. MAIN UI ---
-st.title("🛡️ Omni-Architect v41.0")
+st.title("🛡️ Omni-Architect v41.1")
 
 if not st.session_state.state['selected_files']:
     st.info("👈 Use the Explorer to select your project files.")
@@ -145,14 +145,32 @@ else:
             st.session_state.state['infra_out'] = ask_ai(f"Write {strategy} for {paths} on {flavor}. Use ---FILE: filename---")
         render_registry(st.session_state.state['infra_out'])
 
-    with tabs[1]: # OBSERVABILITY
+    with tabs[1]: # OBSERVABILITY RESTORED
+        st.subheader("🔭 OpenTelemetry Strategy")
+        
+        obs_mode = st.radio("Choose OTel Pattern:", 
+                            ["Universal Sidecar (K8s/Infra)", "SDK Implementation (Code-level)"], 
+                            horizontal=True)
         
         c1, c2 = st.columns(2)
-        if c1.button("💉 Inject OTel Sidecar", use_container_width=True):
-            st.session_state.state['infra_out'] = ask_ai(f"Add OpenTelemetry sidecars to this: {st.session_state.state['infra_out']}. Use ---FILE: filename---")
-            st.rerun()
+        
+        if c1.button("🧪 Apply Telemetry", type="primary", use_container_width=True):
+            if obs_mode == "Universal Sidecar (K8s/Infra)":
+                if not st.session_state.state['infra_out']:
+                    st.error("❌ No Infrastructure found! Please generate K8s Manifests in the 'Infra' tab first.")
+                else:
+                    prompt = f"Inject an OpenTelemetry Collector sidecar into these K8s manifests: {st.session_state.state['infra_out']}. Use ---FILE: filename---"
+                    st.session_state.state['infra_out'] = ask_ai(prompt)
+                    st.rerun()
+            else:
+                prompt = f"Analyze these files: {st.session_state.state['selected_files']}. Rewrite them to implement OTel SDK. Use ---FILE: filename---"
+                st.session_state.state['obs_out'] = ask_ai(prompt)
+                st.rerun()
+
         if c2.button("📊 Gen Grafana/Prometheus", use_container_width=True):
-            st.session_state.state['obs_out'] = ask_ai(f"Generate Prometheus rules and Grafana dashboard for these files: {st.session_state.state['selected_files']}")
+            st.session_state.state['obs_out'] = ask_ai(f"Generate Prometheus rules and Grafana dashboard for: {st.session_state.state['selected_files']}")
+            st.rerun()
+
         render_registry(st.session_state.state['obs_out'])
 
     with tabs[2]: # SECURITY

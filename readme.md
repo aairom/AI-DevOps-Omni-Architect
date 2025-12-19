@@ -1,4 +1,4 @@
-# 🛡️ DevSecOps Omni-Architect v40.0
+# 🛡️ DevSecOps Omni-Architect v41.0
 
 Omni-Architect is a high-performance, AI-native workbench designed to automate the entire lifecycle of cloud-native infrastructure. This version introduces a **Visual Navigation** model, allowing for precise context selection and enterprise-grade infrastructure targeting.
 

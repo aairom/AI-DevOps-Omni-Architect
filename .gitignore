@@ -70,3 +70,5 @@ Thumbs.db
 gen_cache/
 temp/
 *.tmp
+myvenv.sh
+.omni_architect.pid

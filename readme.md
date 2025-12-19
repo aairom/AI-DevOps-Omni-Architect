@@ -66,8 +66,22 @@ cp .env_template .env
 ```
 
 4. **Run the application**
+
+**Option A: Interactive Mode**
 ```bash
 streamlit run ai-devops-Omni-Architect_v42.py
+```
+
+**Option B: Detached Mode (Background)**
+```bash
+# Start the app in background
+./start.sh
+
+# Stop the app
+./stop.sh
+
+# View logs in real-time
+tail -f omni_architect.log
 ```
 
 5. **Access the UI**
@@ -112,6 +126,9 @@ Edit [`config.py`](config.py) to customize:
 ---
 
 ## 📚 Architecture
+
+For detailed architecture diagrams and component interactions, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
 
 ### Project Structure
 

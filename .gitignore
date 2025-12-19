@@ -63,6 +63,7 @@ htmlcov/
 
 # misc
 _old/
+old/
 commands.sh
 myenv.sh
-
+secrets.py

@@ -6,3 +6,9 @@ mistralai
 python-dotenv
 cryptography
 requests
+openai
+redis
+pyyaml
+gitpython
+pytest
+pytest-cov

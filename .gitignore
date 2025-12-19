@@ -22,8 +22,8 @@ wheels/
 
 # Virtual Environment
 venv/
-env/
 ENV/
+env/
 .venv
 
 # IDE
@@ -33,37 +33,40 @@ ENV/
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Data
-data/
-*.png
-*.jpg
-*.jpeg
-*.pdf
-*.tiff
+# Environment variables
+.env
+.env.local
+.env.*.local
 
 # Logs
 *.log
 logs/
+omni_architect.log
 
-# Environment
-.env
-.env.local
+# Cache
+.cache/
+*.cache
+__pycache__/
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
+.tox/
 
-# Docker
-.dockerignore
+# Streamlit
+.streamlit/
 
-# misc
-_old/
-old/
-commands.sh
-myenv.sh
-secrets.py
+# Security
+.encryption_key
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+gen_cache/
+temp/
+*.tmp

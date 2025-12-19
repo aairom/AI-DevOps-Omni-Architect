@@ -1,0 +1,8 @@
+streamlit
+ollama
+watchdog
+google-generativeai
+mistralai
+python-dotenv
+cryptography
+requests

@@ -3,12 +3,19 @@ version: '3.8'
 services:
   omni-architect:
     build: .
-    container_name: devsecops-sentinel
+    container_name: omni-architect-v41
     ports:
       - "8501:8501"
     volumes:
-      - .:/app                # Maps your project code
-      - ~/.kube:/root/.kube   # Optional: Maps your local K8s config
-    env_file:
-      - .env                  # Automatically loads your API keys
-    restart: unless-stopped
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATSONX_API_KEY=${WATSONX_API_KEY}
+      - WATSONX_PROJECT_ID=${WATSONX_PROJECT_ID}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    networks:
+      - devops-net
+
+networks:
+  devops-net:
+    driver: bridge

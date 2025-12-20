@@ -16,6 +16,20 @@ Omni-Architect v43 introduces **asynchronous AI operations** for 3x faster perfo
 - **Async Cache Manager**: Lightning-fast cache operations
 - **Toggle Support**: Switch between async and sync modes on-the-fly
 
+### 🤝 **Multi-Model Ensemble** (NEW!)
+- **Combine Multiple AI Models**: Use multiple providers simultaneously
+- **Ensemble Strategies**: Voting, consensus, weighted average, best-of-N
+- **Improved Accuracy**: Leverage strengths of different models
+- **Fault Tolerance**: Continue working if one provider fails
+- **Preset Configurations**: Balanced, fast, quality, and diverse ensembles
+
+### 🔌 **WebSocket Real-Time Collaboration** (NEW!)
+- **Live Collaboration**: Multiple users working together in real-time
+- **Shared Sessions**: Create and join collaboration sessions
+- **Real-Time Updates**: See changes as they happen
+- **Chat Integration**: Communicate with team members
+- **Session Management**: Track participants and activity
+
 ## 🎯 What's New in v42
 
 ### 🏗️ **Modular Architecture**

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Stop script for AI-DevOps-Omni-Architect v42
+# Stop script for AI-DevOps-Omni-Architect v43
 # Stops the Streamlit app running in detached mode
 
 set -e
@@ -9,20 +9,21 @@ set -e
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
 PID_FILE=".omni_architect.pid"
 APP_NAME="streamlit"
 
-echo -e "${GREEN}Stopping AI-DevOps-Omni-Architect v42...${NC}"
+echo -e "${GREEN}Stopping AI-DevOps-Omni-Architect...${NC}"
 
 # Check if PID file exists
 if [ ! -f "$PID_FILE" ]; then
     echo -e "${YELLOW}No PID file found. App may not be running.${NC}"
     
-    # Try to find and kill any running Streamlit processes
-    PIDS=$(pgrep -f "streamlit run ai-devops-Omni-Architect_v42.py" || true)
+    # Try to find and kill any running Streamlit processes (v42 or v43)
+    PIDS=$(pgrep -f "streamlit run ai-devops-Omni-Architect" || true)
     
     if [ -z "$PIDS" ]; then
         echo -e "${YELLOW}No running Streamlit processes found.${NC}"
@@ -34,7 +35,7 @@ if [ ! -f "$PID_FILE" ]; then
         sleep 2
         
         # Force kill if still running
-        REMAINING=$(pgrep -f "streamlit run ai-devops-Omni-Architect_v42.py" || true)
+        REMAINING=$(pgrep -f "streamlit run ai-devops-Omni-Architect" || true)
         if [ ! -z "$REMAINING" ]; then
             echo -e "${YELLOW}Force stopping remaining processes...${NC}"
             echo "$REMAINING" | xargs kill -9 2>/dev/null || true
@@ -85,8 +86,8 @@ else
     rm "$PID_FILE"
 fi
 
-# Clean up any orphaned Streamlit processes
-ORPHANS=$(pgrep -f "streamlit run ai-devops-Omni-Architect_v42.py" || true)
+# Clean up any orphaned Streamlit processes (v42 or v43)
+ORPHANS=$(pgrep -f "streamlit run ai-devops-Omni-Architect" || true)
 if [ ! -z "$ORPHANS" ]; then
     echo -e "${YELLOW}Cleaning up orphaned processes...${NC}"
     echo "$ORPHANS" | xargs kill -9 2>/dev/null || true

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Start script for AI-DevOps-Omni-Architect v42
+# Start script for AI-DevOps-Omni-Architect v43
 # Launches the Streamlit app in detached mode
 
 set -e
@@ -9,15 +9,17 @@ set -e
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-APP_NAME="ai-devops-Omni-Architect_v42.py"
+APP_VERSION="${1:-v43}"  # Default to v43, can specify v42 as argument
+APP_NAME="ai-devops-Omni-Architect_${APP_VERSION}.py"
 PORT=8501
 LOG_FILE="omni_architect.log"
 PID_FILE=".omni_architect.pid"
 
-echo -e "${GREEN}Starting AI-DevOps-Omni-Architect v42...${NC}"
+echo -e "${GREEN}Starting AI-DevOps-Omni-Architect ${APP_VERSION}...${NC}"
 
 # Check if app is already running
 if [ -f "$PID_FILE" ]; then
@@ -51,8 +53,27 @@ if [ ! -f ".env" ]; then
     echo -e "${YELLOW}Copy .env_template to .env and configure your API keys${NC}"
 fi
 
+# Check if app file exists
+if [ ! -f "$APP_NAME" ]; then
+    echo -e "${RED}Error: $APP_NAME not found${NC}"
+    if [ "$APP_VERSION" = "v43" ]; then
+        echo -e "${YELLOW}Trying v42 as fallback...${NC}"
+        APP_NAME="ai-devops-Omni-Architect_v42.py"
+        APP_VERSION="v42"
+        if [ ! -f "$APP_NAME" ]; then
+            echo -e "${RED}Error: No application file found${NC}"
+            exit 1
+        fi
+    else
+        exit 1
+    fi
+fi
+
 # Start the app in detached mode
 echo -e "${GREEN}Launching Streamlit app on port $PORT...${NC}"
+if [ "$APP_VERSION" = "v43" ]; then
+    echo -e "${BLUE}⚡ Using v43 with Async Operations${NC}"
+fi
 nohup streamlit run "$APP_NAME" --server.port="$PORT" --server.headless=true > "$LOG_FILE" 2>&1 &
 
 # Save PID
@@ -64,12 +85,20 @@ sleep 2
 
 if ps -p "$APP_PID" > /dev/null 2>&1; then
     echo -e "${GREEN}✓ App started successfully!${NC}"
+    echo -e "${GREEN}  Version: ${APP_VERSION}${NC}"
     echo -e "${GREEN}  PID: $APP_PID${NC}"
     echo -e "${GREEN}  URL: http://localhost:$PORT${NC}"
     echo -e "${GREEN}  Logs: $LOG_FILE${NC}"
     echo ""
+    if [ "$APP_VERSION" = "v43" ]; then
+        echo -e "${BLUE}⚡ Async Mode: Available${NC}"
+        echo -e "${BLUE}🤝 Ensemble: Available${NC}"
+        echo -e "${BLUE}🔌 WebSocket: Available${NC}"
+    fi
+    echo ""
     echo -e "${YELLOW}To stop the app, run: ./stop.sh${NC}"
     echo -e "${YELLOW}To view logs, run: tail -f $LOG_FILE${NC}"
+    echo -e "${YELLOW}To switch versions, run: ./start.sh v42 or ./start.sh v43${NC}"
 else
     echo -e "${RED}✗ Failed to start app${NC}"
     echo -e "${RED}Check $LOG_FILE for errors${NC}"

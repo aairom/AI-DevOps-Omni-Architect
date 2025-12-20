@@ -19,6 +19,17 @@ from .async_ai_provider import (
     AsyncAIProviderFactory
 )
 
+from .ensemble_provider import (
+    EnsembleProvider,
+    EnsembleStrategy,
+    VotingStrategy,
+    WeightedAverageStrategy,
+    ConsensusStrategy,
+    BestOfNStrategy,
+    ENSEMBLE_PRESETS,
+    create_ensemble_from_preset
+)
+
 __all__ = [
     'AIProvider',
     'OllamaProvider',
@@ -31,7 +42,15 @@ __all__ = [
     'AsyncGeminiProvider',
     'AsyncWatsonXProvider',
     'AsyncOpenAIProvider',
-    'AsyncAIProviderFactory'
+    'AsyncAIProviderFactory',
+    'EnsembleProvider',
+    'EnsembleStrategy',
+    'VotingStrategy',
+    'WeightedAverageStrategy',
+    'ConsensusStrategy',
+    'BestOfNStrategy',
+    'ENSEMBLE_PRESETS',
+    'create_ensemble_from_preset'
 ]
 
 # Made with Bob

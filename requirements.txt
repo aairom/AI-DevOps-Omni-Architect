@@ -12,3 +12,5 @@ pyyaml
 gitpython
 pytest
 pytest-cov
+aiohttp
+asyncio

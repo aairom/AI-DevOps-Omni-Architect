@@ -10,13 +10,28 @@ from .ai_provider import (
     AIProviderFactory
 )
 
+from .async_ai_provider import (
+    AsyncAIProvider,
+    AsyncOllamaProvider,
+    AsyncGeminiProvider,
+    AsyncWatsonXProvider,
+    AsyncOpenAIProvider,
+    AsyncAIProviderFactory
+)
+
 __all__ = [
     'AIProvider',
     'OllamaProvider',
     'GeminiProvider',
     'WatsonXProvider',
     'OpenAIProvider',
-    'AIProviderFactory'
+    'AIProviderFactory',
+    'AsyncAIProvider',
+    'AsyncOllamaProvider',
+    'AsyncGeminiProvider',
+    'AsyncWatsonXProvider',
+    'AsyncOpenAIProvider',
+    'AsyncAIProviderFactory'
 ]
 
 # Made with Bob

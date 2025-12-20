@@ -1,4 +1,8 @@
-# 🏗️ AI-DevOps Omni-Architect v42 - Architecture
+# 🏗️ AI-DevOps Omni-Architect v43 - Architecture
+
+## 🆕 Async Architecture Overview
+
+v43 introduces asynchronous operations for improved performance and scalability.
 
 ## System Architecture Diagram
 
@@ -76,6 +80,96 @@ graph TB
     style GIT fill:#fff9c4
 ```
 
+## Async Architecture Diagram (v43)
+
+```mermaid
+graph TB
+    subgraph "User Interface Layer"
+        UI[Streamlit Web UI<br/>Port 8501]
+    end
+
+    subgraph "Application Core"
+        MAIN[Main Application v43<br/>ai-devops-Omni-Architect_v43.py]
+        CONFIG[Configuration Manager<br/>config.py]
+        SESSION[Session State Manager]
+        ASYNC_CTRL[Async Controller]
+    end
+
+    subgraph "Async AI Provider Layer"
+        ASYNC_FACTORY[Async AI Provider Factory]
+        ASYNC_OLLAMA[Async Ollama Provider<br/>Concurrent Local Models]
+        ASYNC_GEMINI[Async Gemini Provider<br/>Concurrent Google AI]
+        ASYNC_WATSONX[Async WatsonX Provider<br/>Concurrent IBM AI]
+        ASYNC_OPENAI[Async OpenAI Provider<br/>Concurrent GPT-4]
+    end
+
+    subgraph "Sync AI Provider Layer (Fallback)"
+        FACTORY[AI Provider Factory]
+        OLLAMA[Ollama Provider]
+        GEMINI[Gemini Provider]
+        WATSONX[WatsonX Provider]
+        OPENAI[OpenAI Provider]
+    end
+
+    subgraph "Utility Services"
+        SECURITY[Security Manager<br/>utils/security.py]
+        ASYNC_CACHE[Async Cache Manager<br/>utils/async_cache_manager.py]
+        CACHE[Cache Manager<br/>utils/cache_manager.py]
+        ASYNC_HELPERS[Async Helpers<br/>utils/async_helpers.py]
+        GIT[Git Manager<br/>utils/git_manager.py]
+    end
+
+    subgraph "External Services"
+        REDIS[(Redis Cache<br/>Optional)]
+        GITREPO[Git Repository]
+        FILESYSTEM[File System]
+    end
+
+    UI --> MAIN
+    MAIN --> CONFIG
+    MAIN --> SESSION
+    MAIN --> ASYNC_CTRL
+    
+    ASYNC_CTRL --> ASYNC_FACTORY
+    ASYNC_CTRL --> FACTORY
+    
+    ASYNC_FACTORY --> ASYNC_OLLAMA
+    ASYNC_FACTORY --> ASYNC_GEMINI
+    ASYNC_FACTORY --> ASYNC_WATSONX
+    ASYNC_FACTORY --> ASYNC_OPENAI
+    
+    FACTORY --> OLLAMA
+    FACTORY --> GEMINI
+    FACTORY --> WATSONX
+    FACTORY --> OPENAI
+    
+    MAIN --> SECURITY
+    MAIN --> ASYNC_CACHE
+    MAIN --> CACHE
+    MAIN --> ASYNC_HELPERS
+    MAIN --> GIT
+    
+    ASYNC_CACHE --> REDIS
+    CACHE --> REDIS
+    GIT --> GITREPO
+    MAIN --> FILESYSTEM
+    
+    CONFIG -.->|Environment Variables| ASYNC_GEMINI
+    CONFIG -.->|Environment Variables| ASYNC_WATSONX
+    CONFIG -.->|Environment Variables| ASYNC_OPENAI
+
+    style UI fill:#e1f5ff
+    style MAIN fill:#fff3e0
+    style ASYNC_FACTORY fill:#c8e6c9
+    style ASYNC_OLLAMA fill:#c8e6c9
+    style ASYNC_GEMINI fill:#c8e6c9
+    style ASYNC_WATSONX fill:#c8e6c9
+    style ASYNC_OPENAI fill:#c8e6c9
+    style ASYNC_CACHE fill:#b2dfdb
+    style ASYNC_HELPERS fill:#b2dfdb
+    style SECURITY fill:#ffebee
+```
+
 ## Component Flow Diagram
 
 ```mermaid
@@ -124,6 +218,93 @@ flowchart LR
     style K fill:#e1bee7
     style O fill:#ffcdd2
     style S fill:#fff9c4
+```
+
+## Async Data Flow Architecture (v43)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Streamlit UI
+    participant Main as Main App v43
+    participant AsyncHelper as Async Helper
+    participant AsyncCache as Async Cache
+    participant Security as Security Manager
+    participant AsyncProvider as Async AI Provider
+    participant External as External API
+
+    User->>UI: Submit Request
+    UI->>Main: Process Request
+    Main->>Security: Validate Input
+    Security-->>Main: Validated
+    
+    alt Async Mode Enabled
+        Main->>AsyncHelper: Run Async Operation
+        AsyncHelper->>AsyncCache: Check Cache (Async)
+        
+        alt Cache Hit
+            AsyncCache-->>AsyncHelper: Return Cached Result
+            AsyncHelper-->>Main: Cached Response
+        else Cache Miss
+            AsyncHelper->>AsyncProvider: Generate Request (Async)
+            AsyncProvider->>Security: Encrypt API Key
+            Security-->>AsyncProvider: Encrypted Key
+            
+            par Concurrent API Calls
+                AsyncProvider->>External: API Call 1
+                AsyncProvider->>External: API Call 2
+                AsyncProvider->>External: API Call 3
+            end
+            
+            External-->>AsyncProvider: Responses
+            AsyncProvider-->>AsyncHelper: Generated Content
+            AsyncHelper->>AsyncCache: Store Result (Async)
+            AsyncHelper-->>Main: Response
+        end
+        
+        Main-->>UI: Display Result
+        UI-->>User: Show Output
+    else Sync Mode (Fallback)
+        Note over Main,External: Falls back to v42 sync flow
+    end
+```
+
+## Async Batch Processing Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Streamlit UI
+    participant Main as Main App
+    participant BatchProcessor as Batch Processor
+    participant AsyncProvider as Async Provider
+    participant API1 as API Endpoint 1
+    participant API2 as API Endpoint 2
+    participant API3 as API Endpoint 3
+
+    User->>UI: Submit Batch Request
+    UI->>Main: Process Multiple Items
+    Main->>BatchProcessor: Create Batch Tasks
+    
+    BatchProcessor->>AsyncProvider: Initialize Semaphore (Max 3)
+    
+    par Concurrent Processing (Rate Limited)
+        BatchProcessor->>AsyncProvider: Task 1
+        AsyncProvider->>API1: Request 1
+        BatchProcessor->>AsyncProvider: Task 2
+        AsyncProvider->>API2: Request 2
+        BatchProcessor->>AsyncProvider: Task 3
+        AsyncProvider->>API3: Request 3
+    end
+    
+    API1-->>AsyncProvider: Response 1
+    API2-->>AsyncProvider: Response 2
+    API3-->>AsyncProvider: Response 3
+    
+    AsyncProvider-->>BatchProcessor: All Results
+    BatchProcessor-->>Main: Aggregated Results
+    Main-->>UI: Display All Results
+    UI-->>User: Show Batch Output
 ```
 
 ## Data Flow Architecture
@@ -358,11 +539,105 @@ flowchart TD
     style L fill:#b3e5fc
 ```
 
+## Async Cache Strategy (v43)
+
+```mermaid
+flowchart TD
+    A[Request] --> B{Async Mode?}
+    B -->|No| SYNC[Use Sync Cache]
+    B -->|Yes| C{Check Async Memory Cache}
+    
+    C -->|Hit| D[Return from Async Memory]
+    C -->|Miss| E{Redis Available?}
+    
+    E -->|Yes| F{Check Async Redis}
+    E -->|No| G[Async AI Call]
+    
+    F -->|Hit| H[Return from Async Redis]
+    F -->|Miss| G
+    
+    G --> I[Async AI Provider Response]
+    I --> J[Store in Async Memory]
+    J --> K{Redis Available?}
+    K -->|Yes| L[Store in Async Redis]
+    K -->|No| M[Return Response]
+    L --> M
+    
+    SYNC --> N[Sync Cache Flow]
+
+    style D fill:#c8e6c9
+    style H fill:#c8e6c9
+    style I fill:#fff9c4
+    style J fill:#b3e5fc
+    style L fill:#b3e5fc
+    style G fill:#ffccbc
+```
+
+## Async Concurrency Control
+
+```mermaid
+flowchart LR
+    subgraph "Request Queue"
+        R1[Request 1]
+        R2[Request 2]
+        R3[Request 3]
+        R4[Request 4]
+        R5[Request 5]
+    end
+    
+    subgraph "Semaphore (Max 3)"
+        S[Semaphore<br/>Available: 3]
+    end
+    
+    subgraph "Active Processing"
+        P1[Processing 1]
+        P2[Processing 2]
+        P3[Processing 3]
+    end
+    
+    subgraph "Waiting"
+        W1[Waiting 4]
+        W2[Waiting 5]
+    end
+    
+    R1 --> S
+    R2 --> S
+    R3 --> S
+    R4 --> W1
+    R5 --> W2
+    
+    S --> P1
+    S --> P2
+    S --> P3
+    
+    P1 -.->|Complete| S
+    P2 -.->|Complete| S
+    P3 -.->|Complete| S
+    
+    W1 -.->|Acquire| S
+    W2 -.->|Acquire| S
+    
+    style S fill:#fff9c4
+    style P1 fill:#c8e6c9
+    style P2 fill:#c8e6c9
+    style P3 fill:#c8e6c9
+    style W1 fill:#ffccbc
+    style W2 fill:#ffccbc
+```
+
 ---
 
 ## Key Components
 
-### 1. **Main Application** (`ai-devops-Omni-Architect_v42.py`)
+### 1. **Main Applications**
+- **v43 (Async)** (`ai-devops-Omni-Architect_v43.py`)
+  - Async-first architecture
+  - Concurrent AI operations
+  - Batch processing support
+  - Toggle between async/sync modes
+  - Enhanced performance monitoring
+
+- **v42 (Stable)** (`ai-devops-Omni-Architect_v42.py`)
 - Streamlit-based web interface
 - Session state management
 - Request routing and orchestration
@@ -374,11 +649,20 @@ flowchart TD
 - Provider configurations
 - Security settings
 
-### 3. **AI Provider Layer** (`providers/ai_provider.py`)
-- Abstract provider interface
-- Multiple provider implementations
-- Unified API for all providers
-- Error handling and validation
+### 3. **AI Provider Layers**
+- **Async Providers** (`providers/async_ai_provider.py`) ⚡ NEW!
+  - Async abstract provider interface
+  - Concurrent request handling
+  - Batch generation support
+  - Non-blocking operations
+  - Token caching for watsonx
+  - Thread pool for CPU-bound operations
+
+- **Sync Providers** (`providers/ai_provider.py`)
+  - Abstract provider interface
+  - Multiple provider implementations
+  - Unified API for all providers
+  - Error handling and validation
 
 ### 4. **Security Manager** (`utils/security.py`)
 - Credential encryption/decryption
@@ -386,13 +670,30 @@ flowchart TD
 - Command whitelist enforcement
 - Path traversal prevention
 
-### 5. **Cache Manager** (`utils/cache_manager.py`)
-- In-memory caching
-- Optional Redis integration
-- TTL-based expiration
-- Cache statistics
+### 5. **Cache Managers**
+- **Async Cache Manager** (`utils/async_cache_manager.py`) ⚡ NEW!
+  - Async in-memory caching
+  - Async Redis integration
+  - Concurrent cache operations
+  - Batch get/set operations
+  - Async lock management
+  - Non-blocking cache access
 
-### 6. **Git Manager** (`utils/git_manager.py`)
+- **Sync Cache Manager** (`utils/cache_manager.py`)
+  - In-memory caching
+  - Optional Redis integration
+  - TTL-based expiration
+  - Cache statistics
+
+### 6. **Async Helpers** (`utils/async_helpers.py`) ⚡ NEW!
+- Event loop management for Streamlit
+- Async-to-sync decorators
+- Batch processing utilities
+- Progress tracking for async operations
+- Retry logic with exponential backoff
+- Semaphore-based concurrency control
+
+### 7. **Git Manager** (`utils/git_manager.py`)
 - Repository operations
 - Commit management
 - Branch operations
@@ -406,8 +707,9 @@ flowchart TD
 |-------|-------------|
 | **Frontend** | Streamlit |
 | **Backend** | Python 3.9+ |
+| **Async Runtime** | asyncio, aiohttp |
 | **AI Providers** | Ollama, Gemini, WatsonX, OpenAI |
-| **Caching** | In-Memory, Redis (optional) |
+| **Caching** | In-Memory, Redis (optional), Async Redis |
 | **Security** | Cryptography, Input Validation |
 | **Version Control** | GitPython |
 | **Containerization** | Docker, Docker Compose |
@@ -417,11 +719,14 @@ flowchart TD
 
 ## Design Patterns
 
-1. **Factory Pattern**: AI Provider creation
+1. **Factory Pattern**: AI Provider creation (sync & async)
 2. **Singleton Pattern**: Configuration and managers
 3. **Strategy Pattern**: Different AI providers
 4. **Decorator Pattern**: Caching layer
 5. **Observer Pattern**: Session state management
+6. **Async/Await Pattern**: Non-blocking operations
+7. **Semaphore Pattern**: Concurrency control
+8. **Thread Pool Pattern**: CPU-bound async operations
 
 ---
 

@@ -26,8 +26,14 @@ class Config:
     
     # Application
     APP_NAME = "Omni-Architect"
-    APP_VERSION = "v42.0"
+    APP_VERSION = "v43.0"
     APP_ICON = "🛡️"
+    
+    # Async Configuration
+    ASYNC_ENABLED = True
+    MAX_CONCURRENT_REQUESTS = 3
+    ASYNC_TIMEOUT = 120  # seconds
+    BATCH_SIZE = 5
     
     # Directories
     BASE_DIR = Path.cwd()

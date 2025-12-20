@@ -1,8 +1,11 @@
 # 🏗️ AI-DevOps Omni-Architect v43 - Architecture
 
-## 🆕 Async Architecture Overview
+## 🆕 v43 Features Overview
 
-v43 introduces asynchronous operations for improved performance and scalability.
+v43 introduces three major features:
+- ⚡ **Async Operations**: 3x faster concurrent processing
+- 🤝 **Multi-Model Ensemble**: Combine multiple AI models
+- 🔌 **WebSocket Collaboration**: Real-time team collaboration
 
 ## System Architecture Diagram
 
@@ -444,6 +447,206 @@ graph TB
     VAL3 --> PATH1
     PATH1 --> PATH2
     PATH2 --> PATH3
+
+## Ensemble Architecture (v43)
+
+```mermaid
+graph TB
+    subgraph "Ensemble Layer"
+        USER[User Request] --> ENSEMBLE[Ensemble Provider]
+        ENSEMBLE --> STRATEGY{Ensemble Strategy}
+    end
+    
+    subgraph "Strategy Selection"
+        STRATEGY -->|Voting| VOTE[Majority Vote]
+        STRATEGY -->|Weighted| WEIGHT[Weighted Average]
+        STRATEGY -->|Consensus| CONSENSUS[Require Agreement]
+        STRATEGY -->|Best-of-N| BEST[Quality Selection]
+    end
+    
+    subgraph "Concurrent AI Providers"
+        ENSEMBLE --> P1[Provider 1<br/>GPT-4]
+        ENSEMBLE --> P2[Provider 2<br/>Gemini]
+        ENSEMBLE --> P3[Provider 3<br/>watsonx]
+        ENSEMBLE --> P4[Provider 4<br/>Ollama]
+    end
+    
+    subgraph "Response Processing"
+        P1 --> R1[Response 1]
+        P2 --> R2[Response 2]
+        P3 --> R3[Response 3]
+        P4 --> R4[Response 4]
+        
+        R1 --> COMBINE[Combine Responses]
+        R2 --> COMBINE
+        R3 --> COMBINE
+        R4 --> COMBINE
+    end
+    
+    VOTE --> COMBINE
+    WEIGHT --> COMBINE
+    CONSENSUS --> COMBINE
+    BEST --> COMBINE
+    
+    COMBINE --> RESULT[Final Response]
+    RESULT --> USER
+
+    style ENSEMBLE fill:#c8e6c9
+    style STRATEGY fill:#fff9c4
+    style COMBINE fill:#b3e5fc
+    style RESULT fill:#c8e6c9
+```
+
+## WebSocket Collaboration Architecture (v43)
+
+```mermaid
+graph TB
+    subgraph "Users"
+        U1[User 1<br/>Browser]
+        U2[User 2<br/>Browser]
+        U3[User 3<br/>Browser]
+    end
+    
+    subgraph "WebSocket Layer"
+        WS[WebSocket Manager]
+        
+        subgraph "Connections"
+            C1[Connection 1]
+            C2[Connection 2]
+            C3[Connection 3]
+        end
+        
+        subgraph "Sessions"
+            S1[Session 1<br/>Participants: U1, U2]
+            S2[Session 2<br/>Participants: U3]
+        end
+    end
+    
+    subgraph "Shared State"
+        STATE[Session State]
+        MESSAGES[Message History]
+        PARTICIPANTS[Participant List]
+    end
+    
+    subgraph "Real-Time Features"
+        BROADCAST[Message Broadcasting]
+        SYNC[State Synchronization]
+        CHAT[Team Chat]
+        PRESENCE[Presence Tracking]
+    end
+    
+    U1 <-->|WebSocket| C1
+    U2 <-->|WebSocket| C2
+    U3 <-->|WebSocket| C3
+    
+    C1 --> WS
+    C2 --> WS
+    C3 --> WS
+    
+    WS --> S1
+    WS --> S2
+    
+    S1 --> STATE
+    S1 --> MESSAGES
+    S1 --> PARTICIPANTS
+    
+    WS --> BROADCAST
+    WS --> SYNC
+    WS --> CHAT
+    WS --> PRESENCE
+    
+    BROADCAST -.->|Real-time| U1
+    BROADCAST -.->|Real-time| U2
+    SYNC -.->|Auto-sync| U1
+    SYNC -.->|Auto-sync| U2
+
+    style WS fill:#fff9c4
+    style S1 fill:#c8e6c9
+    style S2 fill:#c8e6c9
+    style BROADCAST fill:#ffccbc
+    style SYNC fill:#b3e5fc
+```
+
+## Ensemble Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Streamlit UI
+    participant Ensemble as Ensemble Provider
+    participant P1 as Provider 1 (GPT-4)
+    participant P2 as Provider 2 (Gemini)
+    participant P3 as Provider 3 (watsonx)
+    participant Strategy as Ensemble Strategy
+
+    User->>UI: Submit Request
+    UI->>Ensemble: Generate with Ensemble
+    
+    par Concurrent Generation
+        Ensemble->>P1: Generate Request
+        Ensemble->>P2: Generate Request
+        Ensemble->>P3: Generate Request
+    end
+    
+    P1-->>Ensemble: Response 1
+    P2-->>Ensemble: Response 2
+    P3-->>Ensemble: Response 3
+    
+    Ensemble->>Strategy: Combine Responses
+    Strategy-->>Ensemble: Best Combined Response
+    
+    Ensemble-->>UI: Final Response + Metadata
+    UI-->>User: Display Result
+    
+    Note over User,Strategy: Metadata includes:<br/>- Individual responses<br/>- Strategy used<br/>- Providers used
+```
+
+## WebSocket Collaboration Flow
+
+```mermaid
+sequenceDiagram
+    participant U1 as User 1
+    participant U2 as User 2
+    participant WS as WebSocket Manager
+    participant Session as Collaboration Session
+    participant State as Shared State
+
+    U1->>WS: Create Session
+    WS->>Session: Initialize Session
+    Session-->>U1: Session ID
+    
+    U1->>U2: Share Session ID
+    
+    U2->>WS: Join Session (ID)
+    WS->>Session: Add Participant
+    Session-->>U2: Session State
+    
+    Note over U1,U2: Both users now in session
+    
+    U1->>WS: Update State (select file)
+    WS->>Session: Update Shared State
+    Session->>State: Store Update
+    
+    par Real-time Broadcast
+        WS-->>U1: State Update
+        WS-->>U2: State Update
+    end
+    
+    U2->>WS: Send Message
+    WS->>Session: Add to History
+    
+    par Broadcast Message
+        WS-->>U1: New Message
+        WS-->>U2: New Message
+    end
+    
+    U1->>WS: Generate Infrastructure
+    WS->>Session: Update with Result
+    
+    par Sync Result
+        WS-->>U1: Generation Complete
+        WS-->>U2: Generation Complete
+    end
     PATH3 --> CMD1
     CMD1 --> CMD2
     CMD2 --> CMD3

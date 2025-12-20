@@ -163,21 +163,36 @@ For detailed architecture diagrams and component interactions, see [ARCHITECTURE
 
 ```
 AI-DevOps-Omni-Architect/
-├── ai-devops-Omni-Architect_v43.py  # Main application (Async)
+├── ai-devops-Omni-Architect_v43.py  # Main application (Async + Ensemble + WebSocket)
 ├── ai-devops-Omni-Architect_v42.py  # Main application (Stable)
 ├── config.py                         # Configuration management
 ├── providers/
 │   ├── __init__.py
 │   ├── ai_provider.py               # Sync AI provider abstraction
-│   └── async_ai_provider.py         # Async AI provider abstraction (NEW!)
+│   ├── async_ai_provider.py         # Async AI provider abstraction
+│   └── ensemble_provider.py         # Multi-model ensemble (NEW!)
 ├── utils/
 │   ├── __init__.py
 │   ├── security.py                  # Security utilities
 │   ├── cache_manager.py             # Sync caching system
-│   ├── async_cache_manager.py       # Async caching system (NEW!)
-│   ├── async_helpers.py             # Async utilities (NEW!)
+│   ├── async_cache_manager.py       # Async caching system
+│   ├── async_helpers.py             # Async utilities
+│   ├── websocket_manager.py         # Real-time collaboration (NEW!)
 │   └── git_manager.py               # Git operations
 ├── tests/
+│   ├── __init__.py
+│   ├── test_security.py             # Security tests
+│   └── test_async_operations.py     # Async tests
+├── start.sh                          # Start script (supports v42/v43)
+├── stop.sh                           # Stop script
+├── requirements.txt                  # Python dependencies
+├── .env_template                     # Environment template
+├── CHANGELOG.md                      # Version history
+├── ARCHITECTURE.md                   # Architecture documentation
+├── ASYNC_GUIDE.md                    # Async operations guide
+├── ENSEMBLE_WEBSOCKET_GUIDE.md       # Ensemble & WebSocket guide (NEW!)
+└── README.md                         # This file
+```
 │   ├── __init__.py
 │   └── test_security.py             # Unit tests
 ├── requirements.txt                  # Python dependencies
@@ -228,6 +243,20 @@ AI-DevOps-Omni-Architect/
   - Batch get/set operations
   - Non-blocking cache access
 
+#### **Ensemble Provider** ([`providers/ensemble_provider.py`](providers/ensemble_provider.py)) 🤝 NEW!
+- Multi-model ensemble orchestration
+- 4 ensemble strategies: Voting, Weighted Average, Consensus, Best-of-N
+- 4 preset configurations: Balanced, Fast, Quality, Diverse
+- Fault tolerance and metadata tracking
+- Combine strengths of multiple AI models
+
+#### **WebSocket Manager** ([`utils/websocket_manager.py`](utils/websocket_manager.py)) 🔌 NEW!
+- Real-time collaboration support
+- Session management and participant tracking
+- Live message broadcasting
+- Shared state synchronization
+- Automatic connection cleanup
+
 #### **Async Helpers** ([`utils/async_helpers.py`](utils/async_helpers.py)) ⚡ NEW!
 - Streamlit async integration utilities
 - Event loop management
@@ -245,14 +274,15 @@ AI-DevOps-Omni-Architect/
 
 ## 🎮 Usage Guide
 
-### 1. Enable Async Mode ⚡ (Recommended)
+### 1. Enable Features ⚡ (Recommended)
 
 In the sidebar under **Advanced Parameters**:
-- Toggle **⚡ Async Mode** ON for faster performance
+- Toggle **⚡ Async Mode** ON for 3x faster performance
 - Toggle **📦 Batch Mode** ON for concurrent processing
-- Async mode provides 3x faster response times
+- Toggle **🤝 Ensemble Mode** ON to use multiple AI models
+- Click **🔌 Create/Join Session** for real-time collaboration
 
-### 2. Select AI Provider
+### 2. Select AI Provider or Ensemble
 
 Choose from the sidebar:
 - **Local (Ollama)**: For local models
@@ -267,35 +297,35 @@ Use the **File Explorer** to:
 - Select files
 - Use Smart Filter to highlight code files
 
-### 4. Generate Infrastructure
+### 5. Generate Infrastructure
 
 **Infra & IaC Tab**:
 - Choose strategy (Dockerfile, K8s, Terraform)
 - Select target flavor (AWS, GCP, IBM, Azure)
 - Click Generate
 
-### 5. Add Observability
+### 6. Add Observability
 
 **Observability Tab**:
 - Inject OpenTelemetry sidecars
 - Generate Prometheus rules
 - Create Grafana dashboards
 
-### 6. Harden Security
+### 7. Harden Security
 
 **Security Tab**:
 - Apply DevSecOps best practices
 - Optimize resource requests
 - Implement FinOps controls
 
-### 7. Execute & Deploy
+### 8. Execute & Deploy
 
 **Execution Tab**:
 - Save generated files
 - Run commands safely
 - View output
 
-### 8. Version Control
+### 9. Version Control
 
 **Git Integration Tab**:
 - View repository status

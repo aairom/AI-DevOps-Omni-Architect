@@ -161,7 +161,7 @@ AI-DevOps-Omni-Architect/
 - Provider-specific implementations:
   - `OllamaProvider`: Local models
   - `GeminiProvider`: Google Gemini
-  - `WatsonXProvider`: IBM watsonx
+  - `watsonxProvider`: IBM watsonx
   - `OpenAIProvider`: OpenAI GPT models
 
 #### **Security Manager** ([`utils/security.py`](utils/security.py))

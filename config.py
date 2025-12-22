@@ -26,7 +26,7 @@ class Config:
     
     # Application
     APP_NAME = "Omni-Architect"
-    APP_VERSION = "v43.0"
+    APP_VERSION = "v44.0"
     APP_ICON = "🛡️"
     
     # Async Configuration

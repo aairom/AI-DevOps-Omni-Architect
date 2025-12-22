@@ -1,10 +1,22 @@
-# 🛡️ DevSecOps Omni-Architect v43.0
+# 🛡️ DevSecOps Omni-Architect v44.0
 
-**Enterprise-Grade AI-Native Infrastructure Workbench with Async Operations, Multi-Model Ensemble & Real-Time Collaboration**
+**Enterprise-Grade AI-Native Infrastructure Workbench with Advanced Monitoring Dashboard**
 
-Omni-Architect v43 introduces three major features: **asynchronous AI operations** for 3x faster performance, **multi-model ensemble** for improved accuracy, and **WebSocket real-time collaboration** for team work, along with all the enterprise features from v42: modular architecture, enhanced security, intelligent caching, and comprehensive Git integration.
+Omni-Architect v44 introduces the **Advanced Monitoring Dashboard** for real-time performance tracking, system health monitoring, and comprehensive metrics visualization, building on v43's async operations, multi-model ensemble, and WebSocket collaboration features.
 
 ---
+
+## 🎯 What's New in v44
+
+### 📈 **Advanced Monitoring Dashboard** (NEW!)
+- **Real-Time Metrics**: Live system performance tracking with auto-refresh
+- **System Health Monitoring**: CPU, memory, active requests, and cache hit rates
+- **AI Provider Analytics**: Per-provider metrics including response times, tokens, and error rates
+- **Performance Statistics**: P50, P95, P99 response times and request rate tracking
+- **Error Tracking**: Recent error log with detailed error information
+- **Health Status**: Automated health checks with issue detection
+- **Metrics Export**: Download comprehensive metrics in JSON format
+- **Visual Dashboard**: Intuitive UI with color-coded status indicators
 
 ## 🎯 What's New in v43
 
@@ -91,20 +103,30 @@ cp .env_template .env
 
 4. **Run the application**
 
-**Option A: v43 with Async (Recommended)**
+**Option A: v44 with Monitoring Dashboard (Recommended)**
+```bash
+streamlit run ai-devops-Omni-Architect_v44.py
+```
+
+**Option B: v43 with Async**
 ```bash
 streamlit run ai-devops-Omni-Architect_v43.py
 ```
 
-**Option B: v42 (Stable)**
+**Option C: v42 (Stable)**
 ```bash
 streamlit run ai-devops-Omni-Architect_v42.py
 ```
 
-**Option C: Detached Mode (Background)**
+**Option D: Detached Mode (Background)**
 ```bash
-# Start the app in background
+# Start the app in background (defaults to v44)
 ./start.sh
+
+# Or specify version
+./start.sh v44  # Latest with monitoring
+./start.sh v43  # Async operations
+./start.sh v42  # Stable
 
 # Stop the app
 ./stop.sh
@@ -163,6 +185,7 @@ For detailed architecture diagrams and component interactions, see [ARCHITECTURE
 
 ```
 AI-DevOps-Omni-Architect/
+├── ai-devops-Omni-Architect_v44.py  # Main application (Monitoring Dashboard) ⭐ NEW!
 ├── ai-devops-Omni-Architect_v43.py  # Main application (Async + Ensemble + WebSocket)
 ├── ai-devops-Omni-Architect_v42.py  # Main application (Stable)
 ├── config.py                         # Configuration management
@@ -170,34 +193,28 @@ AI-DevOps-Omni-Architect/
 │   ├── __init__.py
 │   ├── ai_provider.py               # Sync AI provider abstraction
 │   ├── async_ai_provider.py         # Async AI provider abstraction
-│   └── ensemble_provider.py         # Multi-model ensemble (NEW!)
+│   └── ensemble_provider.py         # Multi-model ensemble
 ├── utils/
 │   ├── __init__.py
 │   ├── security.py                  # Security utilities
 │   ├── cache_manager.py             # Sync caching system
 │   ├── async_cache_manager.py       # Async caching system
 │   ├── async_helpers.py             # Async utilities
-│   ├── websocket_manager.py         # Real-time collaboration (NEW!)
+│   ├── websocket_manager.py         # Real-time collaboration
+│   ├── monitoring_dashboard.py      # Advanced monitoring (NEW!) ⭐
 │   └── git_manager.py               # Git operations
 ├── tests/
 │   ├── __init__.py
 │   ├── test_security.py             # Security tests
 │   └── test_async_operations.py     # Async tests
-├── start.sh                          # Start script (supports v42/v43)
+├── start.sh                          # Start script (supports v42/v43/v44)
 ├── stop.sh                           # Stop script
 ├── requirements.txt                  # Python dependencies
 ├── .env_template                     # Environment template
 ├── CHANGELOG.md                      # Version history
 ├── ARCHITECTURE.md                   # Architecture documentation
 ├── ASYNC_GUIDE.md                    # Async operations guide
-├── ENSEMBLE_WEBSOCKET_GUIDE.md       # Ensemble & WebSocket guide (NEW!)
-└── README.md                         # This file
-```
-│   ├── __init__.py
-│   └── test_security.py             # Unit tests
-├── requirements.txt                  # Python dependencies
-├── .env_template                     # Environment template
-├── CHANGELOG.md                      # Version history
+├── ENSEMBLE_WEBSOCKET_GUIDE.md       # Ensemble & WebSocket guide
 └── README.md                         # This file
 ```
 
@@ -263,6 +280,15 @@ AI-DevOps-Omni-Architect/
 - Async decorators and context managers
 - Batch processing utilities
 - Progress tracking for async operations
+
+#### **Monitoring Dashboard** ([`utils/monitoring_dashboard.py`](utils/monitoring_dashboard.py)) 📈 NEW!
+- Real-time system metrics tracking
+- AI provider performance analytics
+- Request/response time monitoring
+- Error tracking and logging
+- Health status checks
+- Metrics export functionality
+- Auto-refresh capabilities
 
 #### **Git Manager** ([`utils/git_manager.py`](utils/git_manager.py))
 - Repository operations
@@ -567,14 +593,14 @@ streamlit run ai-devops-Omni-Architect_v42.py
 
 ## 🗺️ Roadmap
 
-### v44.0 (Planned)
-- [ ] WebSocket support for real-time collaboration
+### v45.0 (Planned)
 - [ ] Template marketplace
 - [ ] Plugin system
-- [ ] Advanced monitoring dashboard
-- [ ] Multi-model ensemble support
+- [ ] Distributed monitoring
+- [ ] Advanced alerting system
+- [ ] Custom metric definitions
 
-### v45.0 (Future)
+### v46.0 (Future)
 - [ ] Multi-user support
 - [ ] Role-based access control
 - [ ] Audit logging

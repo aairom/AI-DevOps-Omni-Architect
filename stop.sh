@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Stop script for AI-DevOps-Omni-Architect v43
+# Stop script for AI-DevOps-Omni-Architect v44
 # Stops the Streamlit app running in detached mode
 
 set -e
@@ -22,7 +22,7 @@ echo -e "${GREEN}Stopping AI-DevOps-Omni-Architect...${NC}"
 if [ ! -f "$PID_FILE" ]; then
     echo -e "${YELLOW}No PID file found. App may not be running.${NC}"
     
-    # Try to find and kill any running Streamlit processes (v42 or v43)
+    # Try to find and kill any running Streamlit processes (v42, v43, or v44)
     PIDS=$(pgrep -f "streamlit run ai-devops-Omni-Architect" || true)
     
     if [ -z "$PIDS" ]; then
@@ -86,7 +86,7 @@ else
     rm "$PID_FILE"
 fi
 
-# Clean up any orphaned Streamlit processes (v42 or v43)
+# Clean up any orphaned Streamlit processes (v42, v43, or v44)
 ORPHANS=$(pgrep -f "streamlit run ai-devops-Omni-Architect" || true)
 if [ ! -z "$ORPHANS" ]; then
     echo -e "${YELLOW}Cleaning up orphaned processes...${NC}"
